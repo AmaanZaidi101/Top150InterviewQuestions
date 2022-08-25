@@ -6,11 +6,60 @@ using System.Threading.Tasks;
 
 namespace FunctionLibrary
 {
+    public static class StatClass
+    {
+        public static void fun()
+        {
+            Console.WriteLine(this+"works");
+        }
+    }
     public class OtherFunctions
     {
         public bool IsValidSudoku(char[][] board)
         {
             return FillSudoku(board);
+        }
+
+        public int[] solution(int[] balances, string[] requests)
+        {
+            for(int i=0; i < requests.Length; i++)
+            {
+                var req = requests[i];
+                var arr = req.Split(" ");
+                int acc = int.Parse(arr[1]);
+                int amt = int.Parse(arr[2]);
+                if (acc < 1 || acc > balances.Length)
+                    return new int[] { -(i+1) };
+                switch (arr[0])
+                {
+                    case "withdraw":
+                        if (balances[acc - 1] - amt < 0)
+                            return new int[] { -(i+1) };
+                        else
+                            balances[acc - 1] -= amt;
+                        break;
+                    case "deposit":
+                        balances[acc - 1] += amt;
+                        break;
+                    case "transfer":
+                        int acc2 = amt;
+                        amt = int.Parse(arr[3]);
+                        if (acc2 < 1 || acc2 > balances.Length)
+                            return new int[] { -(i+1) };
+                        if (balances[acc - 1] - amt < 0)
+                            return new int[] { -(i + 1) };
+                        else
+                        {
+                            balances[acc - 1] -= amt;
+                            balances[acc2 - 1] += amt;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+            return balances;
+
         }
 
         private bool FillSudoku(char[][] board, int row=0, int col=0)
@@ -733,4 +782,97 @@ namespace FunctionLibrary
             return 0;
         }
     }
+
+    abstract public class Course
+    {
+        // TODO: implement
+        public virtual int cost { get; }
+    }
+
+    public class ProgrammingCourse : Course
+    {
+        // TODO: implement
+        public override int cost { get { return 30; } }
+    }
+
+    public class MathematicsCourse : Course
+    {
+        // TODO: implement
+        public override int cost { get { return 20; } }
+    }
+
+    public class EconomicsCourse : Course
+    {
+        // TODO: implement
+        public override int cost { get { return 10; } }
+    }
+
+    public class User
+    {
+        static int count=0;
+        public int Id { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        private int money;
+
+        public User(string fname, string lname, int mon=30)
+        {
+            Id = count++; 
+            FirstName = fname;
+            LastName = lname;
+            money = mon;
+        }
+        public bool order(List<Course> courses)
+        {
+            // TODO: implement
+            int tmp = money;
+            foreach (var course in courses)
+            {
+                if (money - course.cost < 0)
+                {
+                    money = tmp;
+                    return false;
+                }
+                else
+                    money -= course.cost;
+            }
+            return true;
+        }
+    }
+
+    public class solve
+    {
+        public bool[] solution(string[][] userInformation, string[][] orders)
+        {
+            User[] users = new User[userInformation.Length];
+            bool[] result = new bool[orders.Length];
+            for (int i = 0; i < userInformation.Length; ++i)
+            {
+                if (userInformation[i].Length == 3)
+                    users[i] = new User(userInformation[i][0], userInformation[i][1], int.Parse(userInformation[i][2]));
+                else
+                    users[i] = new User(userInformation[i][0], userInformation[i][1]);
+            }
+            for (int i = 0; i < orders.Length; ++i)
+            {
+                List<Course> courses = new List<Course>();
+                for (int j = 1; j < orders[i].Length; ++j)
+                {
+                    if (orders[i][j] == "Programming")
+                        courses.Add(new ProgrammingCourse());
+                    if (orders[i][j] == "Mathematics")
+                        courses.Add(new MathematicsCourse());
+                    if (orders[i][j] == "Economics")
+                        courses.Add(new EconomicsCourse());
+                }
+                result[i] = users[int.Parse(orders[i][0])].order(courses);
+            }
+            return result;
+        }
+
+    }
+
+   
 }
+
+

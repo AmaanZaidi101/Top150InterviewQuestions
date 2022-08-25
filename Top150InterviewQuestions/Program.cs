@@ -9,9 +9,10 @@ namespace Top150InterviewQuestions
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
-            //OtherOperations();
+            StatClass.fun();
+            OtherOperations();
             //ArrayOperations();
-            StringOperations();
+            //StringOperations();
             //MathOperations();
             //LinkedListOperations();
             //TreeOperations();
@@ -128,6 +129,25 @@ namespace Top150InterviewQuestions
 
         private static void OtherOperations()
         {
+            solve s = new solve();
+            string[][] userinfo = new string[][]
+            {
+                new string[]{"Sandra","Scott","70" }
+            };
+            string[][] orderinfo = new string[][]
+            {
+                new string[]{"0","Programming","Programming","Programming" },
+                new string[]{"0","Economics","Programming" },
+                new string[]{"0", "Mathematics", "Mathematics"}
+            };
+            var boolarr = s.solution(userinfo, orderinfo);
+            foreach (var item in boolarr)
+            {
+                Console.WriteLine(item);
+                return;
+            }
+
+
             Trie trie = new Trie();
             trie.Insert("dog");
             trie.Insert("door");
